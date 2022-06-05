@@ -1,0 +1,46 @@
+*{
+    padding: 0;
+    margin:0;
+    font-family: 'Work Sans', sans-serif;
+    text-decoration: none;
+}
+*::after, *::before {
+    box-sizing: border-box;
+}
+html, body{
+    background-color: #fafafa;
+    min-height: 100%;
+    overflow: hidden;
+    h1{
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin: 0;
+        padding: 0;
+    }
+    h2{
+        font-size: 1.5rem;
+        font-weight: 600w;
+        margin: 0;
+        padding: 0;
+    }
+    h3{
+        font-size: 1.2rem;
+        font-weight: normal;
+        margin: 0;
+        padding: 0;
+    }
+}
+a, a:hover, a:visited, a:active {
+    color: inherit;
+    text-decoration: none;
+   }
+
+button, button:hover, button:visited, button:active {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    padding: 0;
+    color: inherit;
+    text-decoration: none;
+}
