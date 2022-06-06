@@ -2,12 +2,9 @@ import { RiCloseLine } from "react-icons/ri";
 import { useState } from "react";
 import { createGroup } from "../services/messaging";
 
-
-
 export const NewChatModal = (props) => {
-
-const [name , setName] = useState("");
-const [description , setDescription] = useState("");
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
 
   const enterName = (e) => {
     const nameData = e.target.value;
@@ -20,12 +17,13 @@ const [description , setDescription] = useState("");
 
   const handleNewChatSubmit = async (e) => {
     e.preventDefault();
-    await createGroup(name, props.user.id);
+    const newGroup = await createGroup(name, props.user.id);
     setName("");
     setDescription("");
+    props.setGroups([...props.groups, newGroup]);
     props.setShowModal(!props.showModal);
   };
-
+console.log(name);
   return (
     <div className={`newChatModal ${props.showModal ? "show" : ""}`}>
       <div className="newChatModal__content">
@@ -35,15 +33,13 @@ const [description , setDescription] = useState("");
             <RiCloseLine />
           </button>
         </div>
-        <form
-          onSubmit={(e)=>handleNewChatSubmit(e)}
-        >
+        <form onSubmit={(e) => handleNewChatSubmit(e)}>
           <div className="newChatModal__body">
             <div className="newChatModal__body__input">
               <input
                 type="text"
                 placeholder="Enter chat name"
-                value={props.newChatName}
+                value={name}
                 onChange={(e) => enterName(e)}
               />
             </div>
@@ -51,14 +47,12 @@ const [description , setDescription] = useState("");
               <input
                 type="text"
                 placeholder="Enter chat description"
-                value={props.newChatDescription}
+                value={description}
                 onChange={(e) => enterDescription(e)}
               />
             </div>
             <div className="newChatModal__body__button">
-              <button
-                onClick={()=> props.setShowModal(!props.showModal)}
-              >
+              <button onClick={() => props.setShowModal(!props.showModal)}>
                 Cancel
               </button>
               <button type="submit">Create Chat</button>

@@ -3,13 +3,10 @@ import { io } from "socket.io-client";
 import { getHostedServer } from "../config";
 
 export const ChatTab = ({ handleChatChange, group, user }) => {
+
+
   const changeCurrentChat = (group) => {
     handleChatChange(group);
-    console.log(group);
-    const data = {
-      groupId: group._id,
-      userId: user.id,
-    };
   };
 
   return (

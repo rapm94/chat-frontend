@@ -51,14 +51,14 @@
           width: 50%;
           height: 25px;
           border-radius: 15px;
-          border: 1px solid $accent-green;
-          background-color: $accent-green;
+          border: 1px solid $darkgreen;
+          background-color: $darkgreen;
           color: #fff;
           font-size: 0.8em;
           cursor: pointer;
           &:hover {
             background-color: #fff;
-            color: #ccc;
+            color: black;
           }
         }
       }

@@ -4,13 +4,12 @@ import { io } from "socket.io-client";
 import { RiSendPlaneFill } from "react-icons/ri";
 import { getAllMessages, sendMessage } from "../services/messaging";
 import { useOutletContext } from "react-router";
-import { useMutation, useQuery } from "react-query";
-import { getHostedServer } from "../config";
+import {useQuery } from "react-query";
 
 export const Chat = () => {
   const [inputData, setInputData] = useState("");
   const [messages, setMessages] = useState([]);
-  const [user, currentChat] = useOutletContext();
+  const [currentUser, currentChat] = useOutletContext();
 
   const scrollRef = useRef();
 
@@ -27,10 +26,10 @@ export const Chat = () => {
 
   const handleSendMessage = async (message) => {
 
-    const {data} = await sendMessage(message, currentChat, user.id);
+    const {data} = await sendMessage(message, currentChat, currentUser.id);
     const msgs = [...messages];
     console.log(data);
-    msgs.push({ message: data.newMessage.message, sender: user.id });
+    msgs.push({ message: data.newMessage.message, sender: currentUser.id });
     setMessages(msgs);
   };
 
@@ -54,7 +53,7 @@ export const Chat = () => {
         {messages.map((message, index) => (
           <ChatBubble
             key={index}
-            sender={message.sender === user.id ? "sender" : ""}
+            sender={message.sender === currentUser.id ? "sender" : ""}
             message={message.message}
             reference={scrollRef}
             senderName={message.name}

@@ -16,15 +16,16 @@ import { ChatTab } from "../ChatTab";
 import { useQuery } from "react-query";
 import { getAllGroups } from "../../services/messaging";
 import { getHostedServer } from "../../config";
+
 export const ChatPage = () => {
   const [groups, setGroups] = useState([]);
   const [currentChat, setCurrentChat] = useState(undefined);
-  const [currentUser, setCurrentUser] = useState(undefined);
+  const [currentUser, setCurrentUser] = useState(null);
   const [toggleMenu, setToggleMenu] = useState(false);
   const [showModal, setShowModal] = useState(true);
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user"));
 
+  
   const handleChatChange = (chat) => {
     setCurrentChat(chat);
   };
@@ -35,20 +36,18 @@ export const ChatPage = () => {
     },
   });
 
+  const connectToSocket = () => {
+    const socket = io(getHostedServer());
+  };
 
-const connectToSocket = () => {
-  const socket = io(getHostedServer());
-}
-
-useEffect(() => {
-  connectToSocket();
-}
-, []);
-
+  useEffect(() => {
+    connectToSocket();
+  }, []);
 
   useEffect(() => {
     setCurrentUser(JSON.parse(localStorage.getItem("user")));
   }, []);
+
 
   return (
     <>
@@ -56,10 +55,7 @@ useEffect(() => {
         <div className="chatHeadBar">
           <div className="chatHeadBar__controls">
             <div className="imageBackground">
-              <img
-                src="https://avatars.dicebear.com/api/human/:seed.svg"
-                alt="profile-pic"
-              />
+              <img src={currentUser?.avatar} alt="profile-pic" />
             </div>
 
             <button
@@ -77,16 +73,16 @@ useEffect(() => {
               <MdAddCircle className="addGroup" />
             </button>
           </div>
-          <div className="chatHeadBar__chatInfo">
-            <img
-              src="https://avatars.dicebear.com/api/human/tyhert.svg"
-              alt="profile-pic"
-            />
-            <h2>{/**TODO: get the name of the chat**/}</h2>
+          <div
+            className="chatHeadBar__chatInfo"
+            style={{ visibility: currentChat ? "visible" : "hidden" }}
+          >
+            <img src={currentChat?.groupAvatar} alt="profile-pic" />
+            <h2>{currentChat?.groupName}</h2>
 
             <button
               onClick={() => {
-                logoutUser(user.email);
+                logoutUser(currentUser.email);
                 navigate("/login");
               }}
             >
@@ -112,19 +108,26 @@ useEffect(() => {
           </div>
           <div className="chatList">
             {groups.map((group, index) => (
-              <ChatTab key={index} user={user} group={group} handleChatChange={handleChatChange} />
+              <ChatTab
+                key={index}
+                user={currentUser}
+                group={group}
+                handleChatChange={handleChatChange}
+              />
             ))}
           </div>
 
           <div className="chat">
-            <Outlet context={[user, currentChat]} />
+            <Outlet context={[currentUser, currentChat]} />
           </div>
         </div>
         <ToastContainer />
         <NewChatModal
           showModal={showModal}
           setShowModal={setShowModal}
-          user={user}
+          user={currentUser}
+          setGroups={setGroups}
+          groups={groups}
         />
       </div>
     </>
